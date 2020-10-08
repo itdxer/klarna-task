@@ -13,5 +13,5 @@ RUN jupyter contrib nbextension install --user
 # Production build which is easy to run (especially on AWS)
 FROM klarna-task-base as klarna-task-prod
 
-EXPOSE 5000
+EXPOSE 80:5000
 CMD python src/server.py
