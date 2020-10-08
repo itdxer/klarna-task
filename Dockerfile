@@ -9,9 +9,3 @@ RUN apt-get update && apt-get install -y libxft-dev libfreetype6 libfreetype6-de
 RUN pip install --ignore-installed certifi -r requirements.txt
 # Activate extentions for the jupyter notebook
 RUN jupyter contrib nbextension install --user
-
-# Production build which is easy to run (especially on AWS)
-FROM klarna-task-base as klarna-task-prod
-
-EXPOSE 80:5000
-CMD python src/server.py
