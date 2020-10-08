@@ -1,0 +1,9 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "containerDefinitions": [
+    {
+      "name": "klarna-task-prod",
+      "image": "424261332927.dkr.ecr.eu-central-1.amazonaws.com/klarna-task-prod",
+    }
+  ]
+}
