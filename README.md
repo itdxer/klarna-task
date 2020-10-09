@@ -34,6 +34,8 @@ $ ./test/send_valid_request.sh
 }
 ```
 
+**Note**: You can also check that the `docker-compose up rest-api-prod` command works as well
+
 3. Create and ECR repository on AWS
 
 **Note**: You need to do this step only once. There is no need to run this step during the subsequent releases
@@ -53,6 +55,8 @@ $ docker-compose push
 ```
 
 5. Deploy REST API with Terraform on EC2
+
+First, you need to specify `*.pem` key that could be used to SSH to the machine. By default, the terraform script will be looking for the `klarna-task-key` in the `~/.ssh/klarna-task-key.pem`, but the name of the key could be changed.
 
 ```bash
 $ terraform init

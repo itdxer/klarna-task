@@ -1,11 +1,15 @@
+import os
+
 import pandas as pd
 from joblib import load
+from waitress import serve
 from flask import request, Flask
 
 from constants import CATEGORICAL_FEATURES, NUMERICAL_FEATURES, MODEL_FEATURES, VALID_FEATURES
 
 
 app = Flask(__name__)
+RUN_PROD = os.environ.get("RUN_PROD")
 MODEL = load("/home/project/models/model.joblib")
 
 
@@ -52,4 +56,9 @@ def predict_default_probability():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=False, threaded=True)
+    if RUN_PROD:
+        print("Running production server")
+        serve(app, host="0.0.0.0", port=80)
+    else:
+        print("Running development server")
+        app.run(host="0.0.0.0", port=5000, debug=True)

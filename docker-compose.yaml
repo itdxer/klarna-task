@@ -9,7 +9,9 @@ services:
     image: 424261332927.dkr.ecr.eu-central-1.amazonaws.com/klarna-task
     depends_on:
       - klarna-task-base
-    command: waitress-serve --port 80 --call 'src.server:create_app'
+    command: python src/server.py
+    environment:
+      - RUN_PROD=1
     ports:
       - "80:80"
 
