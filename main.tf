@@ -27,15 +27,14 @@ resource "aws_instance" "rest_api_prod" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo curl -L \"https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose",
-      "sudo chmod +x /usr/local/bin/docker-compose",
       "sudo apt update",
       "sudo snap install docker",
       "sudo apt install -y awscli",
+      "sudo curl -L \"https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose",
+      "sudo chmod +x /usr/local/bin/docker-compose",
       "sudo $(aws ecr get-login --no-include-email --region eu-central-1)",
-      # "sudo docker-compose pull rest-api",
       "sudo docker pull 424261332927.dkr.ecr.eu-central-1.amazonaws.com/klarna-task",
-      "sudo docker-compose up rest-api",
+      "sudo docker-compose up rest-api-prod &",
     ]
   }
 }
