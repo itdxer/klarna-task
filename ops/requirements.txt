@@ -8,3 +8,4 @@ matplotlib==3.3.2
 lightgbm==3.0.0
 category_encoders==2.2.2
 flask==1.1.2
+waitress==1.4.4

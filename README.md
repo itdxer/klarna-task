@@ -12,10 +12,20 @@ $ docker-compose run train-model
 
 In addition to training the model and storing it in the `models/` folder this script will create a `data/test_predictions.csv` file which contains predictions for the test data. Quality of the model could be assessed from the cross validation scores.
 
-2. Run REST API server locally
+2. Start REST API server
 
 ```bash
 $ docker-compose up rest-api
 ```
 
-## Production deployment
+3. Send test request in order to make sure that API works
+
+```bash
+$ ./test/send_valid_request.sh
+```
+
+## Run jupyter notebook
+
+```bash
+$ docker-compose up notebook
+```

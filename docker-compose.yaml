@@ -1,6 +1,18 @@
 version: "3.4"
 
 services:
+  klarna-task-base:
+    build: .
+    image: 424261332927.dkr.ecr.eu-central-1.amazonaws.com/klarna-task
+
+  rest-api-prod:
+    image: 424261332927.dkr.ecr.eu-central-1.amazonaws.com/klarna-task
+    depends_on:
+      - klarna-task-base
+    command: waitress-serve --port 80 --call 'src.server:create_app'
+    ports:
+      - "80:80"
+
   rest-api:
     image: 424261332927.dkr.ecr.eu-central-1.amazonaws.com/klarna-task
     depends_on:
@@ -8,5 +20,31 @@ services:
     command: python src/server.py
     ports:
       - "5000:5000"
+    volumes:
+      - .:/home/project
+
+  train-model:
+    image: 424261332927.dkr.ecr.eu-central-1.amazonaws.com/klarna-task
+    depends_on:
+      - klarna-task-base
+    command: python src/train.py
+      --input-csv /home/project/data/dataset.csv
+      --output-model /home/project/models/model.joblib
+      --output-test-pred /home/project/data/test_predictions.csv
+    volumes:
+      - .:/home/project
+
+  notebook:
+    image: 424261332927.dkr.ecr.eu-central-1.amazonaws.com/klarna-task
+    depends_on:
+      - klarna-task-base
+    command: jupyter notebook
+      --notebook-dir=/home/project/notebooks
+      --ip 0.0.0.0
+      --no-browser
+      --allow-root
+      --port 8899
+    ports:
+      - "8899:8899"
     volumes:
       - .:/home/project
