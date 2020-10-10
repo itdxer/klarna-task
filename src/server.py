@@ -1,4 +1,5 @@
 import os
+import time
 
 import pandas as pd
 from joblib import load
@@ -49,10 +50,12 @@ def predict_default_probability():
         }
 
     input_data = pd.DataFrame([data])
+    start_prediction_time = time.time()
     probabilities = MODEL.predict_proba(input_data)
+    prediction_time = time.time() - start_prediction_time
     default_probability = probabilities[0, 1]
 
-    return {"default_probability": default_probability, "status": "success"}
+    return {"default_probability": default_probability, "status": "success", "prediction_eta": prediction_time}
 
 
 if __name__ == "__main__":

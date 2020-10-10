@@ -3,10 +3,10 @@ version: "3.4"
 services:
   klarna-task-base:
     build: .
-    image: 424261332927.dkr.ecr.eu-central-1.amazonaws.com/klarna-task
+    image: ${DOCKER_REGISTRY}/klarna-task
 
   rest-api-prod:
-    image: 424261332927.dkr.ecr.eu-central-1.amazonaws.com/klarna-task
+    image: ${DOCKER_REGISTRY}/klarna-task
     depends_on:
       - klarna-task-base
     command: python src/server.py
@@ -16,7 +16,7 @@ services:
       - "80:80"
 
   rest-api:
-    image: 424261332927.dkr.ecr.eu-central-1.amazonaws.com/klarna-task
+    image: ${DOCKER_REGISTRY}/klarna-task
     depends_on:
       - klarna-task-base
     command: python src/server.py
@@ -26,7 +26,7 @@ services:
       - .:/home/project
 
   train-model:
-    image: 424261332927.dkr.ecr.eu-central-1.amazonaws.com/klarna-task
+    image: ${DOCKER_REGISTRY}/klarna-task
     depends_on:
       - klarna-task-base
     command: python src/train.py
@@ -37,7 +37,7 @@ services:
       - .:/home/project
 
   notebook:
-    image: 424261332927.dkr.ecr.eu-central-1.amazonaws.com/klarna-task
+    image: ${DOCKER_REGISTRY}/klarna-task
     depends_on:
       - klarna-task-base
     command: jupyter notebook

@@ -3,7 +3,7 @@ provider "aws" {
 }
 resource "aws_instance" "rest_api_prod" {
   ami = "ami-0c960b947cbb2dd16"
-  instance_type = "t2.micro"
+  instance_type = "t3.small"
   vpc_security_group_ids = [aws_security_group.security_group.id]
   key_name = var.key_pair_name
   associate_public_ip_address = true
@@ -28,13 +28,12 @@ resource "aws_instance" "rest_api_prod" {
   provisioner "remote-exec" {
     inline = [
       "sudo apt update",
-      "sudo snap install docker",
-      "sudo apt install -y awscli",
+      "sudo apt install -y docker.io awscli",
       "sudo curl -L \"https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose",
       "sudo chmod +x /usr/local/bin/docker-compose",
       "sudo $(aws ecr get-login --no-include-email --region eu-central-1)",
-      "sudo docker pull 424261332927.dkr.ecr.eu-central-1.amazonaws.com/klarna-task",
-      "sudo docker-compose up rest-api-prod &",
+      "sudo docker pull ${var.docker_registry}/klarna-task",
+      "sudo DOCKER_REGISTRY=${var.docker_registry} docker-compose up -d rest-api-prod ",
     ]
   }
 }

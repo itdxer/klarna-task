@@ -4,13 +4,27 @@
 
 ## Workflow
 
-1. Build docker image
+1. Create and ECR repository on AWS
+
+**Note**: You need to do this step only once. There is no need to run this step during the subsequent releases
+
+```bash
+$ aws ecr create-repository --repository-name klarna-task
+```
+
+Set environmental variable which will indicate the registry that should be used. For example
+
+```bash
+export DOCKER_REGISTRY=424261332927.dkr.ecr.eu-central-1.amazonaws.com
+```
+
+2. Build docker image
 
 ```bash
 $ docker-compose build
 ```
 
-2. Train the prediction model
+3. Train the prediction model
 
 ```bash
 $ docker-compose run train-model
@@ -18,13 +32,13 @@ $ docker-compose run train-model
 
 In addition to training the model and storing it in the `models/` folder this script will create a `data/test_predictions.csv` file which contains predictions for the test data. Quality of the model could be assessed from the cross validation scores.
 
-2. Test REST API server
+4. Test REST API server
 
 ```bash
 $ docker-compose up rest-api
 ```
 
-Send test request in order to make sure that API works
+Send test request in order to make sure that API works (sends to localhost:5000)
 
 ```bash
 $ ./test/send_valid_request.sh
@@ -36,15 +50,7 @@ $ ./test/send_valid_request.sh
 
 **Note**: You can also check that the `docker-compose up rest-api-prod` command works as well
 
-3. Create and ECR repository on AWS
-
-**Note**: You need to do this step only once. There is no need to run this step during the subsequent releases
-
-```bash
-$ aws ecr create-repository --repository-name klarna-task
-```
-
-4. Push docker model to ECR
+5. Push docker model to ECR
 
 **Note**: Image needs to be rebuild because of the pre-trained model.
 
@@ -54,21 +60,34 @@ $ docker-compose build
 $ docker-compose push
 ```
 
-5. Deploy REST API with Terraform on EC2
+6. Deploy REST API with Terraform on EC2
 
 First, you need to specify `*.pem` key that could be used to SSH to the machine. By default, the terraform script will be looking for the `klarna-task-key` in the `~/.ssh/klarna-task-key.pem`, but the name of the key could be changed.
 
 ```bash
+$ export TF_VAR_docker_registry=$DOCKER_REGISTRY
+$ export TF_VAR_key_pair_name="klarna-task-key"  # or some other name of the key
 $ terraform init
 $ terraform apply
 ```
 
-6. In the terraform logs check IP address of the machine and checks the API
+7. In the terraform logs check IP address of the machine and checks the API
 
 ## Run jupyter notebook
 
 ```bash
 $ docker-compose up notebook
+```
+
+## Example on how to use the API
+
+```python
+import requests
+
+# All features from the dataset.csv file with the same names (API will select important features)
+features = {"age": 59, "merchant_group": "Entertainment", ...}
+response = requests.post("http://ip-address/estimate-default-probability", json=features)
+response_json = response.json()
 ```
 
 ## TODO: Stuff that could be added in order to improve the project
