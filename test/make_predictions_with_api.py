@@ -91,5 +91,4 @@ if __name__ == "__main__":
             "increasing number of samples in order to get meaningful prediction"
         )
     else:
-        # Note: Quite likely that the training data will be used to make the estimate
         print(f"ROC AUC Score: {roc_auc_score(df_responses.default, df_responses.proba)}")
