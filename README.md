@@ -90,6 +90,10 @@ response = requests.post("http://ip-address/estimate-default-probability", json=
 response_json = response.json()
 ```
 
+## Model
+
+The final model is a gradient boosted trees based lightgbm package. Among other models it had the largest cross validation score. Most of the available features has been used except a few which has been eliminated because of their low feature importance. Final models has an average 0.912 ROC AUC score on 10-fold cross validation. Most of the features are being used without any pre-processing, except categorical features, which has been transformed with an ordinal encoding. Parameters of the gradient boosted trees has been tuned in order to reduce effect of the overfitting.
+
 ## TODO: Stuff that could be added in order to improve the project
 
 * After the training deploy model to S3 rather than storing it within the docker image. Afterwards, during the deployment, the model could be downloaded on EC2 and attached to the docker image
