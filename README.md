@@ -2,6 +2,13 @@
 
 > This case consists of a supervised learning example, similar to what we are working with on a daily basis in Klarna . Your task is to predict the probability of default for the datapoints where the ​default ​variable is not set. The answer should contain the resulting predictions in a csv file with two columns, uuid ​and ​pd ​(probability of ​default==1​). Once done expose this model with an API Endpoint on a cloud provider of your choice. Bonus points if you use AWS. Send us the details on how to query the endpoint, attach code used for modelling, a short (max one page) explanation of your model and how you validated it.
 
+## Dependencies
+
+1. Docker
+2. Docker Compose
+3. Terraform
+4. curl (optional)
+
 ## Workflow
 
 1. Create and ECR repository on AWS
