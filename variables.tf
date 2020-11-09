@@ -6,5 +6,4 @@ variable "key_pair_name" {
 variable "docker_registry" {
   description = "Docker registry (AWS server that stores docker images). The registry should contain the `klarna-task` image"
   type = string
-  default = "424261332927.dkr.ecr.eu-central-1.amazonaws.com"
 }
